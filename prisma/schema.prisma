@@ -1,0 +1,76 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Match {
+  id    String @id @default(cuid()) @map("_id")
+  title String
+  gread Int
+  sex   Type
+  order Int?
+
+  // null-normal, 1-esports, 2-soccer
+  // type  Int?
+  event Event
+
+  c_1   Int
+  c_2   Int
+  c_3   Int
+  c_4   Int
+  c_5   Int
+  c_6   Int
+  c_7   Int
+
+  p_1   Game
+  p_2   Game
+  p_3   Game
+  p_4   Game
+  p_5   Game
+  p_6   Game
+}
+
+type Game {
+  l_p1       Int?
+  h_p1       Int?
+  l_p2       Int?
+  h_p2       Int?
+  l_p3       Int?
+  h_p3       Int?
+
+  fHitted    pos?
+  pk         Json?
+
+  // p1 volleyball-1set, badminton-1set, soccer-score, dodgeball-score
+  // p2 volleyball-2set, badminton-2set
+  // p3 volleyball-3set, badminton-3set (if the match is not played, -1)
+  // pk, fHitted is used only for soccer or dodgeball
+
+  startedAt  Int?
+  endedAt    Int?
+  recorderId String?
+  applied    Boolean @default(false)
+}
+
+enum pos {
+  h
+  l
+}
+
+enum Event {
+  volleyball
+  badminton
+  soccer
+  dodgeball
+  esport
+}
+
+enum Type {
+  male
+  female
+  mix
+}
