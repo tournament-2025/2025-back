@@ -37,7 +37,7 @@ app.get("/token", async (c) => {
   return c.json({ token: token })
 })
 
-const port = 3001
+const port = 4000
 console.log(`Server is running on port ${port}`)
 
 serve({
