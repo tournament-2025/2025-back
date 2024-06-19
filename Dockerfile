@@ -1,27 +1,15 @@
-FROM node:20-alpine AS base
+FROM node:20-alpine
 
-FROM base AS builder
-
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package*json tsconfig.json src ./
+COPY package*json tsconfig.json .env ./
+COPY src ./src
+COPY prisma ./prisma
 
-RUN npm ci && \
-    npm run build && \
-    npm prune --production
+RUN npm i
+RUN npm i typescript tsx
+RUN npx prisma generate
 
-FROM base AS runner
-WORKDIR /app
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 hono
-
-COPY --from=builder --chown=hono:nodejs /app/node_modules /app/node_modules
-COPY --from=builder --chown=hono:nodejs /app/dist /app/dist
-COPY --from=builder --chown=hono:nodejs /app/package.json /app/package.json
-
-USER hono
 EXPOSE 4000
 
-CMD ["tsx", "/app/src/index.ts"]
+CMD ["npm", "run", "dev"]
