@@ -1,8 +1,17 @@
 import { Hono } from "hono"
 import { PrismaClient } from "@prisma/client"
+import { auth } from "./auth"
 
 let prisma = new PrismaClient()
 const route = new Hono()
+
+route.use("/1", async (c, next) => {
+  return await auth(c, next)
+})
+
+route.use("/2", async (c, next) => {
+  return await auth(c, next, true)
+})
 
 route.post("/1", async (c) => {
   let { id, p, d }: any = await c.req.json()
