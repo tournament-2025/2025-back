@@ -35,25 +35,26 @@ model Match {
 }
 
 type Game {
-  l_p1       Int?
-  h_p1       Int?
-  l_p2       Int?
-  h_p2       Int?
-  l_p3       Int?
-  h_p3       Int?
+  l_p1        Int?
+  h_p1        Int?
+  l_p2        Int?
+  h_p2        Int?
+  l_p3        Int?
+  h_p3        Int?
 
-  fHitted    pos?
-  pk         Json?
+  fHitted     pos?
+  pk          Json?
 
   // p1 volleyball-1set, badminton-1set, soccer-score, dodgeball-score
   // p2 volleyball-2set, badminton-2set
   // p3 volleyball-3set, badminton-3set (if the match is not played, -1)
   // pk, fHitted is used only for soccer or dodgeball
 
-  startedAt  Int?
-  endedAt    Int?
-  recorderId String?
-  applied    Boolean @default(false)
+  startedAt   Int?
+  scheduledAt Int?
+  endedAt     Int?
+  recorderId  String?
+  applied     Boolean @default(false)
 }
 
 enum pos {
