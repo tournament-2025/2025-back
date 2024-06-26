@@ -13,6 +13,10 @@ route.use("/2", async (c, next) => {
   return await auth(c, next, true)
 })
 
+route.use("/3", async (c, next) => {
+  return await auth(c, next, true)
+})
+
 route.post("/1", async (c) => {
   let { id, p, d }: any = await c.req.json()
 
@@ -32,7 +36,7 @@ route.post("/1", async (c) => {
       }
     })
     return c.json({}, 200)
-    
+
   } catch (error) {
     return c.json({}, 500)
   }
@@ -77,6 +81,23 @@ route.post("/2", async (c) => {
 
     return c.json({}, 200)
   } catch (error) {
+    return c.json({}, 500)
+  }
+})
+
+route.post("3", async (c) => {
+  const { id, p, d }: any = await c.req.json()
+
+  try {
+    const r = await prisma.match.update({
+      where: { id },
+      data: {
+        [`p_${p}`]: d
+      }
+    })
+    return c.json(r)
+  } catch (e) {
+    console.log(e)
     return c.json({}, 500)
   }
 })

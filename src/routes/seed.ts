@@ -4,6 +4,24 @@ import { PrismaClient } from "@prisma/client"
 let prisma = new PrismaClient()
 const route = new Hono()
 
+route.get("/", async (c) => {
+  let d = await prisma.match.findUnique({
+    where: { id: "clxu3ff620000q22ptxgmqo9o" }
+  })
+  d.p_1.endedAt = Date.now()
+
+  await prisma.match.update({
+    where: {
+      "id": "clxu3ff620000q22ptxgmqo9o"
+    },
+    data: {
+      p_1: d.p_1
+    }
+  })
+
+  return c.json({})
+})
+
 // app.get("/", async (c) => {
 //   const r = await prisma.match.createMany({
 //     data: [{
