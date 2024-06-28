@@ -50,11 +50,19 @@ route.post("/:id/:p/start", async (c) => {
 route.post("/:id/:p/end", async (c) => {
   const id = c.req.param("id")
   const p = c.req.param("p")
-  const { recorderId } = await c.req.json()
+  const { recorderId, game } = await c.req.json()
 
   let d = await prisma.match.findUnique({ where: { id } })
   d[`p_${p}`].endedAt = Date.now()
   d[`p_${p}`].recorderId = recorderId
+  d[`p_${p}`].l_p1 = game.l_p1
+  d[`p_${p}`].l_p2 = game.l_p2
+  d[`p_${p}`].l_p3 = game.l_p3
+  d[`p_${p}`].h_p1 = game.h_p1
+  d[`p_${p}`].h_p2 = game.h_p2
+  d[`p_${p}`].h_p3 = game.h_p3
+  d[`p_${p}`].fHitted = game.fHitted
+  d[`p_${p}`].pk = game.pk
   await prisma.match.update({
     where: { id },
     data: {
