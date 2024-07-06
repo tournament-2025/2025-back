@@ -77,6 +77,7 @@ route.get("/match/:grade/:class/", async (c) => {
           [].concat(match[i - 1][0], match[i - 1][1])
       }
 
+      // どっちも1個→完璧確定?
       for (let i = 0; i < 6; i++) {
         if (match[i][0].includes(targetClass)) {
           res.push({
@@ -84,7 +85,8 @@ route.get("/match/:grade/:class/", async (c) => {
             game: i + 1,
             opponent: match[i][1],
             data: data1,
-            certainty: match[i][1].length == 1 ? true : false,
+            certaintyOpponent: match[i][1].length == 1 ? true : false,
+            certaintyMatch: match[i][1].length == 1 && match[i][0].length == 1 ? true : false,
           })
         }
         if (match[i][1].includes(targetClass)) {
@@ -93,7 +95,8 @@ route.get("/match/:grade/:class/", async (c) => {
             game: i + 1,
             opponent: match[i][0],
             data: data1,
-            certainty: match[i][0].length == 1 ? true : false,
+            certaintyOpponent: match[i][0].length == 1 ? true : false,
+            certaintyMatch: match[i][1].length == 1 &&  match[i][0].length == 1 ? true : false,
           })
         }
       }
