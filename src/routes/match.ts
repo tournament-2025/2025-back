@@ -13,6 +13,26 @@ route.use("/*/*/end", async (c, next) => {
   return await auth(c, next)
 })
 
+route.get("/nApplied", async (c) => {
+  const data = await prisma.match.findMany()
+  const r = []
+  
+  data.forEach((data1) => {
+    for (let i = 1; i < 6; i++) {
+      const d = data1[`p_${i}`]
+      if (!d.applied && (d.startedAt && d.endedAt)) {
+        r.push({
+          id: data1.id,
+          game: i,
+          data: data1
+        })
+      }
+    }
+  })
+
+  return c.json(r)
+})
+
 route.get("/now", async (c) => {
   const data = await prisma.match.findMany()
   const r = []
