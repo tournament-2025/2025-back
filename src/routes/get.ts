@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { PrismaClient } from "@prisma/client"
+import { winL } from "../util/wl"
 
 let prisma = new PrismaClient()
 const route = new Hono()
@@ -46,17 +47,6 @@ route.get("/match/:id", async (c) => {
   }
 })
 
-const lWin = (d: any, event: string) => {
-  if (["volleyball", "badminton"].includes(event)) {
-    return d.l_p1 > d.h_p1
-  } else if (event == "dodgeball") {
-    return d.l_p1 > d.h_p1
-  } else if (event == "soccer") {
-    return d.l_p1 > d.h_p1
-  }
-  return true
-}
-
 route.get("/match/:grade/:class/", async (c) => {
   const targetClass = parseInt(await c.req.param("class"))
   const targetGrade = parseInt(await c.req.param("grade"))
@@ -73,7 +63,7 @@ route.get("/match/:grade/:class/", async (c) => {
         const p1 = (i == 1 || i == 2) ? 4 : (i == 3) ? 5 : (i != 6) ? 6 : null
         const p2 = [1, 3, 4].includes(i) ? 0 : 1
         match[p1 - 1][p2] = d.applied ?
-          match[i - 1][lWin(d, data1.event) ? 0 : 1] :
+          match[i - 1][winL(d, data1.event, true, d.applied) ? 0 : 1] :
           [].concat(match[i - 1][0], match[i - 1][1])
       }
 
