@@ -13,6 +13,26 @@ route.use("/*/*/end", async (c, next) => {
   return await auth(c, next)
 })
 
+route.get("/now", async (c) => {
+  const data = await prisma.match.findMany()
+  const r = []
+  
+  data.forEach((data1) => {
+    for (let i = 1; i < 6; i++) {
+      const d = data1[`p_${i}`]
+      if (d.startedAt && !(d.endedAt)) {
+        r.push({
+          id: data1.id,
+          game: i,
+          data: data1
+        })
+      }
+    }
+  })
+
+  return c.json(r)
+})
+
 route.get("/:id", async (c) => {
   const id = c.req.param("id")
 
@@ -72,6 +92,5 @@ route.post("/:id/:p/end", async (c) => {
 
   return c.json({ p: p, id: id })
 })
-
 
 export default route
