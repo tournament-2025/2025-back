@@ -77,6 +77,27 @@ route.get("/now", async (c) => {
   return c.json(r)
 })
 
+route.get("/soon", async (c) => {
+  const data = await prisma.match.findMany()
+  const r = []
+
+  data.forEach((data1) => {
+    for (let i = 1; i < 6; i++) {
+      const d = data1[`p_${i}`]
+      if (!(d.startedAt) && !(d.endedAt) && d.scheduledAt != null && d.scheduledAt - 600000 <= Date.now()) {
+        r.push({
+          id: data1.id,
+          game: i,
+          data: data1
+        })
+      }
+    }
+  })
+
+  return c.json(r)
+})
+
+
 route.get("/:id", async (c) => {
   const id = c.req.param("id")
 
