@@ -67,7 +67,6 @@ route.get("/match/:grade/:class/", async (c) => {
           [].concat(match[i - 1][0], match[i - 1][1])
       }
 
-      // どっちも1個→完璧確定?
       for (let i = 0; i < 6; i++) {
         if (match[i][0].includes(targetClass)) {
           res.push({
