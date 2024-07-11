@@ -63,7 +63,7 @@ route.post("/login", async (c) => {
   } else if (passwords.USER == password) {
     payload.role = roleTokens.USER
     payload.roleType = "USER"
-    payload.exp = Math.floor(Date.now() / 1000) + 60 * 30
+    payload.exp = Math.floor(Date.now() / 1000) + 60 * 60 * 30
     const token = await sign(payload, SECRET)
     return c.json({ token: token })
   } else {
