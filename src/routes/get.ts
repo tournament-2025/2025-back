@@ -51,6 +51,7 @@ route.get("/match/:grade/:class/", async (c) => {
   const targetClass = parseInt(await c.req.param("class"))
   const targetGrade = parseInt(await c.req.param("grade"))
   const res = []
+  let count = 0
 
   try {
     const data = await prisma.match.findMany({ where: { gread: targetGrade } })
@@ -70,24 +71,29 @@ route.get("/match/:grade/:class/", async (c) => {
       for (let i = 0; i < 6; i++) {
         if (match[i][0].includes(targetClass)) {
           res.push({
+            c: count,
             id: data1.id,
             game: i + 1,
             opponent: match[i][1],
             data: data1,
             certaintyOpponent: match[i][1].length == 1 ? true : false,
             certaintyMatch: match[i][1].length == 1 && match[i][0].length == 1 ? true : false,
+            scheduledAt: data1[`p_${i+1}`].scheduledAt
           })
         }
         if (match[i][1].includes(targetClass)) {
           res.push({
+            c: count,
             id: data1.id,
             game: i + 1,
             opponent: match[i][0],
             data: data1,
             certaintyOpponent: match[i][0].length == 1 ? true : false,
             certaintyMatch: match[i][1].length == 1 &&  match[i][0].length == 1 ? true : false,
+            scheduledAt: data1[`p_${i+1}`].scheduledAt
           })
         }
+        count++
       }
     })
 
