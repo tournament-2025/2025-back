@@ -42,7 +42,7 @@ type Game {
   l_p3        Int?
   h_p3        Int?
 
-  fHitted     pos?
+  fHitted     FHitted
   eSport      pos?
   soccer      pos?
 
@@ -55,6 +55,12 @@ type Game {
   endedAt     Int?
   recorderId  String?
   applied     Boolean @default(false)
+}
+
+type FHitted {
+  p1 pos?
+  p2 pos?
+  p3 pos?
 }
 
 enum pos {
