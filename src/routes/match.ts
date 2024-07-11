@@ -147,7 +147,8 @@ route.post("/:id/:p/end", async (c) => {
   d[`p_${p}`].h_p2 = game.h_p2
   d[`p_${p}`].h_p3 = game.h_p3
   d[`p_${p}`].fHitted = game.fHitted
-  d[`p_${p}`].pk = game.pk
+  d[`p_${p}`].soccer = game.soccer
+  d[`p_${p}`].eSport = game.eSport
   await prisma.match.update({
     where: { id },
     data: {
