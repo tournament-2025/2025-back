@@ -50,6 +50,7 @@ type Game {
   // p2 volleyball-2set, badminton-2set
   // p3 volleyball-3set, badminton-3set (if the match is not played, -1)
 
+  place       String?
   startedAt   Int?
   scheduledAt Int?
   endedAt     Int?
