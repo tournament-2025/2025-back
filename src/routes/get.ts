@@ -27,8 +27,16 @@ route.get("/2", async (c) => {
     where: { gread: 1 },
     orderBy: [{ order: "asc" }]
   });
+  const data2 = await prisma.match.findMany({
+    where: { gread: 2 },
+    orderBy: [{ order: "asc" }]
+  });
+  const data3 = await prisma.match.findMany({
+    where: { gread: 3 },
+    orderBy: [{ order: "asc" }]
+  });
 
-  return c.json({ data1: data1 })
+  return c.json({ data1: data1, data2: data2, data3: data3 })
 })
 
 route.get("/match/:id", async (c) => {
