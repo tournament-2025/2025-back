@@ -14,8 +14,8 @@ export let roleTokens = {
 }
 
 const passwords = {
-  ADMIN: "admin",
-  USER: "user"
+  ADMIN: process.env.ADMIN_PASSWORD,
+  USER: process.env.USER_PASSWORD
 }
 
 /* 
