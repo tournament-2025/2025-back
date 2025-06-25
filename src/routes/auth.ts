@@ -9,8 +9,7 @@ const route = new Hono()
 
 export const SECRET = "123456789"
 export let roleTokens = {
-  ADMIN: randomUUID(),
-  USER: randomUUID()
+  ADMIN: randomUUID()
 }
 
 const passwords = {
@@ -22,7 +21,7 @@ const passwords = {
 一斉ログアウトでuuid再生成
 */
 
-export const auth = async (c, next, admin = false) => {
+export const auth = async (c, next) => {
   const { token } = await c.req.json()
   if (token) {
     let payload
@@ -35,15 +34,15 @@ export const auth = async (c, next, admin = false) => {
         return c.json({}, 401)
       }
     }
-    if (admin) {
-      if (payload.role !== roleTokens.ADMIN) {
-        return c.json({m: "PermissionError"}, 403)
-      }
-    } else {
-      if (payload.role !== roleTokens.USER && payload.role !== roleTokens.ADMIN) {
-        return c.json({m: "PermissionError"}, 401)
-      }
-    }
+    // if (admin) {
+    //   if (payload.role !== roleTokens.ADMIN) {
+    //     return c.json({m: "PermissionError"}, 403)
+    //   }
+    // } else {
+    //   if (payload.role !== roleTokens.USER && payload.role !== roleTokens.ADMIN) {
+    //     return c.json({m: "PermissionError"}, 401)
+    //   }
+    // }
     await c.set("jwtPayload", payload)
     await next()
   } else {
@@ -57,13 +56,7 @@ route.post("/login", async (c) => {
   if (passwords.ADMIN == password) {
     payload.role = roleTokens.ADMIN
     payload.roleType = "ADMIN"
-    payload.exp = Math.floor(Date.now() / 1000) + 60 * 60 * 72
-    const token = await sign(payload, SECRET)
-    return c.json({ token: token })
-  } else if (passwords.USER == password) {
-    payload.role = roleTokens.USER
-    payload.roleType = "USER"
-    payload.exp = Math.floor(Date.now() / 1000) + 60 * 60 * 30
+    payload.exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 * 6
     const token = await sign(payload, SECRET)
     return c.json({ token: token })
   } else {
@@ -71,21 +64,20 @@ route.post("/login", async (c) => {
   }
 })
 
-route.use("/genToken", async (c, next) => {
-  return await auth(c, next, true)
-})
+// route.use("/genToken", async (c, next) => {
+//   return await auth(c, next)
+// })
 
-route.post("/genToken", async (c) => {
-  roleTokens = {
-    ADMIN: randomUUID(),
-    USER: randomUUID()
-  }
-  return c.json({})
-})
+// route.post("/genToken", async (c) => {
+//   roleTokens = {
+//     ADMIN: randomUUID(),
+//   }
+//   return c.json({})
+// })
 
-route.post("/whoami", async (c) => {
-  const payload = await c.get("jwtPayload")
-  return c.json({ payload: payload })
-})
+// route.post("/whoami", async (c) => {
+//   const payload = await c.get("jwtPayload")
+//   return c.json({ payload: payload })
+// })
 
 export default route

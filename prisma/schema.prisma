@@ -55,7 +55,7 @@ type Game {
   scheduledAt Int?
   endedAt     Int?
   recorderId  String?
-  applied     Boolean @default(false)
+  applied     Boolean @default(true)
 }
 
 type FHitted {

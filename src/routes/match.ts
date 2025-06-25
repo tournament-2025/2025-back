@@ -1,61 +1,8 @@
 import { Hono } from "hono"
 import { PrismaClient } from "@prisma/client"
-import { auth } from "./auth"
 
 let prisma = new PrismaClient()
 const route = new Hono()
-
-route.use("/*/*/start", async (c, next) => {
-  return await auth(c, next)
-})
-
-route.use("/*/*/end", async (c, next) => {
-  return await auth(c, next)
-})
-
-route.use("/apply/*/*", async (c, next) => {
-  return await auth(c, next)
-})
-
-route.get("/nApplied", async (c) => {
-  const data = await prisma.match.findMany()
-  const r = []
-
-  data.forEach((data1) => {
-    for (let i = 1; i < 6; i++) {
-      const d = data1[`p_${i}`]
-      if (!d.applied && (d.startedAt && d.endedAt)) {
-        r.push({
-          id: data1.id,
-          game: i,
-          data: data1
-        })
-      }
-    }
-  })
-
-  return c.json(r)
-})
-
-route.post("/apply/:id/:game", async (c) => {
-  const id = c.req.param("id")
-  const game = c.req.param("game")
-
-  try {
-    let d = await prisma.match.findUnique({ where: { id } })
-    d[`p_${game}`].applied = true
-    const r = await prisma.match.update({
-      where: { id },
-      data: {
-        [`p_${game}`]: d[`p_${game}`]
-      }
-    })
-
-    return c.json(r)
-  } catch (error) {
-    return c.json({}, 500)
-  }
-})
 
 route.get("/now", async (c) => {
   const data = await prisma.match.findMany()

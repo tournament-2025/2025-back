@@ -10,11 +10,11 @@ route.use("/1", async (c, next) => {
 })
 
 route.use("/2", async (c, next) => {
-  return await auth(c, next, true)
+  return await auth(c, next)
 })
 
 route.use("/3", async (c, next) => {
-  return await auth(c, next, true)
+  return await auth(c, next)
 })
 
 route.post("/1", async (c) => {
