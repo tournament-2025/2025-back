@@ -73,6 +73,10 @@ route.post("/:id/:p/:pId", async (c) => {
     return c.json({}, 404)
   }
 
+  if (d[`p_${p}`].recordedAt) {
+    return c.json({}, 400)
+  }
+
   d[`p_${p}`].recordedAt = Date.now()
   d[`p_${p}`].l_p1 = game.l_p1
   d[`p_${p}`].l_p2 = game.l_p2
