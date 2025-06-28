@@ -8,11 +8,10 @@ export interface gameType {
   fHitted?: any
   eSport?: string
   soccer?: string
-  startedAt?: number
-  endedAt?: number
-  recorderId?: string
+  recordedAt?: number
   applied: boolean
   scheduledAt?: number
+  placeId: string
 }
 
 export const wl = (d: gameType, e: string, a: boolean, da: boolean) => {

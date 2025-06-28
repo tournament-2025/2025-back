@@ -51,10 +51,9 @@ type Game {
   // p3 volleyball-3set, badminton-3set (if the match is not played, -1)
 
   place       String?
-  startedAt   Int?
+  placeId     String @default(cuid())
   scheduledAt Int?
-  endedAt     Int?
-  recorderId  String?
+  recordedAt  Int?
   applied     Boolean @default(true)
 }
 

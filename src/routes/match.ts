@@ -61,32 +61,19 @@ route.get("/:id", async (c) => {
   }
 })
 
-route.post("/:id/:p/start", async (c) => {
+route.post("/:id/:p/:pId", async (c) => {
   const id = c.req.param("id")
   const p = c.req.param("p")
-  const { recorderId } = await c.req.json()
+  const pId = c.req.param('pId')
+  const { game } = await c.req.json()
 
   let d = await prisma.match.findUnique({ where: { id } })
-  d[`p_${p}`].startedAt = Date.now()
-  d[`p_${p}`].recorderId = recorderId
-  await prisma.match.update({
-    where: { id },
-    data: {
-      [`p_${p}`]: d[`p_${p}`]
-    }
-  })
 
-  return c.json({ p: p, id: id })
-})
+  if (pId != d[`p_${p}`].placeId) {
+    return c.json({}, 404)
+  }
 
-route.post("/:id/:p/end", async (c) => {
-  const id = c.req.param("id")
-  const p = c.req.param("p")
-  const { recorderId, game } = await c.req.json()
-
-  let d = await prisma.match.findUnique({ where: { id } })
-  d[`p_${p}`].endedAt = Date.now()
-  d[`p_${p}`].recorderId = recorderId
+  d[`p_${p}`].recordedAt = Date.now()
   d[`p_${p}`].l_p1 = game.l_p1
   d[`p_${p}`].l_p2 = game.l_p2
   d[`p_${p}`].l_p3 = game.l_p3
