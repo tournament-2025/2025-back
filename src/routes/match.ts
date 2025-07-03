@@ -1,11 +1,12 @@
 import { Hono } from "hono"
 import { PrismaClient } from "@prisma/client"
+import matchSelect from "./prisma"
 
 let prisma = new PrismaClient()
 const route = new Hono()
 
 route.get("/now", async (c) => {
-  const data = await prisma.match.findMany()
+  const data = await prisma.match.findMany({ select: matchSelect })
   const r = []
 
   data.forEach((data1) => {
@@ -25,7 +26,7 @@ route.get("/now", async (c) => {
 })
 
 route.get("/soon", async (c) => {
-  const data = await prisma.match.findMany()
+  const data = await prisma.match.findMany({ select: matchSelect })
   const r = []
 
   data.forEach((data1) => {
@@ -49,7 +50,7 @@ route.get("/:id", async (c) => {
   const id = c.req.param("id")
 
   try {
-    const data1 = await prisma.match.findFirst({ where: { id: id as string } });
+    let data1: any = await prisma.match.findFirst({ where: { id: id as string }, select: matchSelect });
 
     if (!data1) {
       return c.json({}, 404)
