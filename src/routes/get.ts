@@ -2,9 +2,23 @@ import { Hono } from "hono"
 import { PrismaClient } from "@prisma/client"
 import { winL } from "../util/wl"
 import matchSelect from "./prisma"
+import { auth } from "./auth"
 
 let prisma = new PrismaClient()
 const route = new Hono()
+
+route.use("/seet", async (c, next) => {
+  return await auth(c, next)
+})
+
+route.post('/seet', async (c) => {
+  try {
+    const data = await prisma.match.findMany({})
+    return c.json({ data: data })
+  } catch (e) {
+    return c.json({ ok: false }, 500)
+  }
+})
 
 route.get("/1", async (c) => {
   try {
