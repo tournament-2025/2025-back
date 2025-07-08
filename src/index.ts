@@ -18,10 +18,11 @@ app.route("/seed", seedRoute)
 app.route("/auth", authRoute)
 app.route("/match", matchRoute)
 
-const port = 4000
+const port = 9011
 console.log(`Server is running on port ${port}`)
 
 serve({
   fetch: app.fetch,
-  port
+  port,
+  hostname: "0.0.0.0"
 })

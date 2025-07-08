@@ -7,13 +7,9 @@ import { auth } from "./auth"
 let prisma = new PrismaClient()
 const route = new Hono()
 
-route.use("/seet", async (c, next) => {
-  return await auth(c, next)
-})
-
-route.post('/seet', async (c) => {
+route.get('/seet', async (c) => {
   try {
-    const data = await prisma.match.findMany({})
+    const data = await prisma.match.findMany()
     return c.json({ data: data })
   } catch (e) {
     return c.json({ ok: false }, 500)
