@@ -36,21 +36,27 @@ route.get("/1", async (c) => {
 route.get("/2", async (c) => {
   const data1 = await prisma.match.findMany({
     where: { gread: 1 },
-    orderBy: [{ order: "asc" }],
+    orderBy: [{ order: "asc" }, { sex: "asc" }],
     select: matchSelect,
   });
   const data2 = await prisma.match.findMany({
     where: { gread: 2 },
-    orderBy: [{ order: "asc" }],
+    orderBy: [{ order: "asc" }, { sex: "asc" }],
     select: matchSelect,
   });
   const data3 = await prisma.match.findMany({
     where: { gread: 3 },
-    orderBy: [{ order: "asc" }],
+    orderBy: [{ order: "asc" }, { sex: "asc" }],
     select: matchSelect,
   });
 
   return c.json({ data1: data1, data2: data2, data3: data3 })
+})
+
+route.get("/3", async (c) => {
+  const data = await prisma.match.findMany({ select: matchSelect })
+
+  return c.json({ data: data })
 })
 
 route.get("/match/:id", async (c) => {
